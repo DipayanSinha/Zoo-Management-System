@@ -2,7 +2,8 @@ from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
 from .forms import DepartmentForm,ExhibitForm,AnimalForm,StaffForm
-
+from .models import Animal,Department
+from .retrieve_profile import department_profile
 # Create your views here.
 def home(request):
     return render(request,'Zoo/home.html',{})
@@ -76,3 +77,25 @@ def add_staff(request):
         form = StaffForm()
     context = {'form':form}
     return render(request,'Zoo/add_Staff.html',context)
+
+def view_animals(request):
+    query_results = Animal.objects.all()
+    print(query_results)
+    context = {'query_results':query_results}
+    return render(request,'Zoo/list_animals.html',context)
+
+def deptList(request):
+    depts = Department.objects.all().order_by('id')
+    return render(request,'Zoo/department_list.html',{'depts':depts})
+
+def profile(request):
+    key = ""
+    if(request.method=='GET'):
+        item = request.GET.get("name")
+        key = department_profile(item)
+    context = {'key':key}
+    print (context)
+    return render(request,'Zoo/profile.html',context)
+
+def sidebar(request):
+    return render(request,'Zoo/Sidebar.html',{})

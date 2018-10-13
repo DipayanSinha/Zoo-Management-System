@@ -26,7 +26,7 @@ class AnimalForm(forms.ModelForm):
     commonname = forms.CharField(max_length=45, label="Common Name",
                            widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Common Name'}))
     scientificname = forms.CharField(max_length=45, label="Scientific Name",
-                                 widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Common Name'}))
+                                 widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Scientific Name'}))
     dob = forms.DateField(label="Date of Birth",
                           widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Date of Birth'}))
     class_field = forms.CharField(max_length=45, label="Class",

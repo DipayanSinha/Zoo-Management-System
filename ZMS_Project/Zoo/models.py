@@ -1,6 +1,5 @@
 from django.db import models
 
-# Create your models here.
 class Animal(models.Model):
     id = models.CharField(primary_key=True, max_length=4)
     commonname = models.CharField(db_column='commonName', max_length=45)  # Field name made lowercase.
@@ -166,6 +165,15 @@ class LooksAfter(models.Model):
         db_table = 'looks_after'
 
 
+class Manages(models.Model):
+    staff = models.ForeignKey('Staff', models.DO_NOTHING)
+    exhibit = models.ForeignKey(Exhibit, models.DO_NOTHING)
+
+    class Meta:
+        managed = False
+        db_table = 'manages'
+
+
 class Staff(models.Model):
     id = models.CharField(primary_key=True, max_length=4)
     firstname = models.CharField(db_column='firstName', max_length=45)  # Field name made lowercase.
@@ -181,6 +189,24 @@ class Staff(models.Model):
     class Meta:
         managed = False
         db_table = 'staff'
+
+
+class TicketBookings(models.Model):
+    id = models.IntegerField(primary_key=True)
+    f_name = models.CharField(max_length=45)
+    l_name = models.CharField(max_length=45)
+    age = models.IntegerField()
+    gender = models.CharField(max_length=1)
+    contact = models.CharField(max_length=10)
+    email = models.CharField(max_length=45)
+    date_of_visit = models.DateField()
+    city = models.CharField(max_length=45)
+    no_of_adult_tickets = models.IntegerField()
+    no_of_child_tickets = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'ticket_bookings'
 
 
 class WorksIn(models.Model):
