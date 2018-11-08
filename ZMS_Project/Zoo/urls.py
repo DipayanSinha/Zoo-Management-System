@@ -10,7 +10,11 @@ urlpatterns = [
     path('add_staff',views.add_staff,name = 'add_staff'),
     path('view_animals',views.view_animals, name = 'view_animals'),
     path('department_list/',views.deptList,name='department_list'),
-    path('profile/',views.profile,name='profile'),
+    path(r'^profile/(?P<id>[0-9]+)/$',views.profile,name='profile'),
     path('sidebar/',views.sidebar,name = 'sidebar'),
+    path('test/',views.test,name = 'test'),
+    path(r'^delete/(?P<id>[0-9]+)/$',views.delete,name = 'delete'),
+    path(r'^edit_department/(?P<id>[0-9]+)/$', views.edit_department, name='edit_department'),
+    path('search_department/',views.search_department,name = 'search_department'),
 
 ]

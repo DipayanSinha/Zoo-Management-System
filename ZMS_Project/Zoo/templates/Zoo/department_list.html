@@ -11,8 +11,8 @@
     <div class="row">
         <div class="col-sm-2">
             <ul class="list-group">
-                <a href="#" class="list-group-item list-group-item-action">Add Record</a>
-                <a href="#" class="list-group-item list-group-item-action">Search Record</a>
+                <a href="{% url 'add_department' %}" class="list-group-item list-group-item-action">Add Record</a>
+                <a href="{% url 'search_department' %}" class="list-group-item list-group-item-action">Search Record</a>
             </ul>
         </div>
         <div class="col-sm-10">
@@ -30,7 +30,7 @@
         <td>{{ dept.id }}</td>
         <td>{{ dept.name }}</td>
         <td>
-            <a href="{% url 'profile' %}?name={{ dept }}">View</a>
+            <a href="{% url 'profile' dept.id%}">View</a>
         </td>
         </tr>
     {% endfor %}

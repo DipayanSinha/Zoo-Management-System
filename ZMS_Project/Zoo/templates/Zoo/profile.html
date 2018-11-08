@@ -10,6 +10,15 @@
     ID = {{ key.id }}
     <br>
     Name = {{ key.name }}
+
+    <p></p>
+    <div>
+        <div class="text-left">
+        <a class="btn btn-primary" role="button" href="{% url 'edit_department' key.id %}" >Edit</a>
+        <a class="btn btn-primary" role="button" href="{% url 'delete' key.id%}" >Delete</a>
+        </div>
+    </div>
 {% endblock %}
+
 </body>
 </html>

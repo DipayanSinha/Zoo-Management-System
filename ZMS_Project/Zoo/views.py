@@ -3,7 +3,8 @@ from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
 from .forms import DepartmentForm,ExhibitForm,AnimalForm,StaffForm
 from .models import Animal,Department
-from .retrieve_profile import department_profile
+
+from django.shortcuts import get_list_or_404, get_object_or_404
 # Create your views here.
 def home(request):
     return render(request,'Zoo/home.html',{})
@@ -88,14 +89,41 @@ def deptList(request):
     depts = Department.objects.all().order_by('id')
     return render(request,'Zoo/department_list.html',{'depts':depts})
 
-def profile(request):
-    key = ""
-    if(request.method=='GET'):
-        item = request.GET.get("name")
-        key = department_profile(item)
+def delete(request, id):
+    department = Department.objects.get(pk = id)
+    department.delete()
+    messages.success(request, 'Deleted successfully')
+    return redirect('department_list')
+    #return render(request,'Zoo/department_list.html',{'depts':depts})
+
+def edit_department(request, id):
+   department = get_object_or_404(Department, pk=id)
+   if request.method == "POST":
+       form = DepartmentForm(request.POST, instance=department)
+       if form.is_valid():
+          post = form.save(commit=True)
+          post.save()
+          return redirect('department_list')
+   else:
+       form = DepartmentForm(instance=department)
+   return render(request, 'Zoo/edit_department.html', {'form': form,'dept':department})
+
+def search_department(request):
+    depts=""
+    if(request.method=='POST'):
+        search_text = request.POST['search_text']
+    else:
+        search_text=''
+    depts = Department.objects.filter(name__contains=search_text )
+    return render(request,'Zoo/department_search.html',{'depts':depts})
+
+
+def profile(request,id):
+    key = Department.objects.get(pk=id)
     context = {'key':key}
-    print (context)
     return render(request,'Zoo/profile.html',context)
 
 def sidebar(request):
     return render(request,'Zoo/Sidebar.html',{})
+def test(request):
+    return render(request, 'Zoo/test.html', {})
