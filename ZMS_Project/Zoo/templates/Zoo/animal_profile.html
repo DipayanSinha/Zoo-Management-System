@@ -1,0 +1,24 @@
+{%  extends 'Zoo/base.html' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Animal Profile</title>
+</head>
+<body>
+{% block content %}
+    ID = {{ key.id }}
+    <br>
+    Name = {{ key.commonname }}
+
+    <p></p>
+    <div>
+        <div class="text-left">
+        <a class="btn btn-primary" role="button" href="{% url 'edit_animal' key.id %}" >Edit</a>
+        <a class="btn btn-primary" role="button" href="{% url 'animal_delete' key.id%}" >Delete</a>
+        </div>
+    </div>
+{% endblock %}
+
+</body>
+</html>

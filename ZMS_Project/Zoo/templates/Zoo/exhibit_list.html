@@ -3,13 +3,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Animal</title>
+    <title>Exhibit</title>
     <!DOCTYPE html>
 </head>
 <body>
 {% block content %}
     <div>
-        <form method='POST' action = "{% url 'view_animals' %}">
+        <form method='POST' action = "{% url 'exhibit_list' %}">
         {% csrf_token %}
             <div class="input-group">
             <input class="form-control col-sm-12" type="search" placeholder="Search" aria-label="Search" name="search_text">
@@ -17,11 +17,10 @@
             </div>
         </form>
     </div>
-    <br>
     <div class="row">
         <div class="col-sm-12">
-            <h2 class="text-center">ANIMAL LIST</h2>
-                {% if animals.count > 0  %}
+            <h2 class="text-center">Exhibit LIST</h2>
+                {% if exhibits.count > 0  %}
                 <div class="col-md-6 offset-md-3">
                     <table class="table table-hover">
                     <tr>
@@ -29,12 +28,12 @@
                         <th>Name</th>
                         <th></th>
                     </tr>
-                    {% for animal in animals %}
+                    {% for exhibit in exhibits %}
                         <tr>
-                        <td>{{ animal.id }}</td>
-                        <td>{{ animal.commonname }}</td>
+                        <td>{{ exhibit.id }}</td>
+                        <td>{{ exhibit.name }}</td>
                         <td>
-                            <a href="{% url 'animal_profile' animal.id%}">View</a>
+                            <a href="{% url 'exhibit_profile' exhibit.id%}">View</a>
                         </td>
                         </tr>
                     {% endfor %}
@@ -47,7 +46,7 @@
 
     <div class="text-left">
                 <a class="btn btn-primary" role="button" href="{% url 'home' %}" >Back</a>
-                <a class="btn btn-primary" role="button" href="{% url 'add_animal' %}" >Add Animal</a>
+                <a class="btn btn-primary" role="button" href="{% url 'add_exhibit' %}" >Add Exhibit</a>
     </div>
 
     </div>

@@ -3,13 +3,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Animal</title>
+    <title>DEPT</title>
     <!DOCTYPE html>
 </head>
 <body>
 {% block content %}
     <div>
-        <form method='POST' action = "{% url 'view_animals' %}">
+        <form method='POST' action = "{% url 'staff_list' %}">
         {% csrf_token %}
             <div class="input-group">
             <input class="form-control col-sm-12" type="search" placeholder="Search" aria-label="Search" name="search_text">
@@ -17,24 +17,25 @@
             </div>
         </form>
     </div>
-    <br>
     <div class="row">
         <div class="col-sm-12">
-            <h2 class="text-center">ANIMAL LIST</h2>
-                {% if animals.count > 0  %}
+            <h2 class="text-center">STAFF LIST</h2>
+                {% if staff.count > 0  %}
                 <div class="col-md-6 offset-md-3">
                     <table class="table table-hover">
                     <tr>
                         <th>ID</th>
-                        <th>Name</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
                         <th></th>
                     </tr>
-                    {% for animal in animals %}
+                    {% for s in staff %}
                         <tr>
-                        <td>{{ animal.id }}</td>
-                        <td>{{ animal.commonname }}</td>
-                        <td>
-                            <a href="{% url 'animal_profile' animal.id%}">View</a>
+                            <td>{{ s.id }}</td>
+                            <td>{{ s.firstname }}</td>
+                            <td>{{ s.lastname }}</td>
+                            <td>
+                            <a href="{% url 'stafff_profile' s.id%}">View</a>
                         </td>
                         </tr>
                     {% endfor %}
@@ -47,7 +48,7 @@
 
     <div class="text-left">
                 <a class="btn btn-primary" role="button" href="{% url 'home' %}" >Back</a>
-                <a class="btn btn-primary" role="button" href="{% url 'add_animal' %}" >Add Animal</a>
+                <a class="btn btn-primary" role="button" href="{% url 'add_staff' %}" >Add Staff</a>
     </div>
 
     </div>
