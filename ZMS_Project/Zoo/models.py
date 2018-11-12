@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
+from django.contrib.auth import get_user_model
 
 class Animal(models.Model):
     id = models.CharField(primary_key=True, max_length=4)
@@ -189,6 +191,8 @@ class Staff(models.Model):
     class Meta:
         managed = False
         db_table = 'staff'
+
+
 
 
 class TicketBookings(models.Model):

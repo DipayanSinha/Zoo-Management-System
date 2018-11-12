@@ -3,6 +3,7 @@
 <!doctype html>
 <html lang="en">
   <head>
+
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -14,7 +15,7 @@
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href="#">Navbar</a>
+  <a class="navbar-brand" href="#">Zoo Planet</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -22,41 +23,33 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav ml-auto">
         {% if user.is_authenticated %}
-            <li class="nav-item">
-                <a class="nav-link" href="{% url 'logout' %}">Logout</a>
-            </li>
             <li class="nav-item active">
-                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            <a class="nav-link" href="{% url 'change_password' %}">Change Password</a>
             </li>
 
-            <li class="nav-item dropdown">
+            <li class="nav-item active dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Dropdown
                 </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <a class="dropdown-item" href="{% url 'add_animal' %}">Add Animal</a>
-                <a class="dropdown-item" href="{% url 'add_department' %}">Add Department</a>
-              <a class="dropdown-item" href="{% url 'add_exhibit' %}">Add Exhibit</a>
-                <a class="dropdown-item" href="{% url 'add_staff' %}">Add Staff</a>
-                <a class="dropdown-item" href="{% url 'view_animals' %}">View Animals</a>
-                <a class="dropdown-item" href="{% url 'department_list' %}">View Department</a>
-                <a class="dropdown-item" href="{% url 'staff_list' %}">View Staff</a>
-                <a class="dropdown-item" href="{% url 'staff_list' %}">View Staff</a>
-                <a class="dropdown-item" href="{% url 'exhibit_list' %}">View Exhibit</a>
+                <a class="dropdown-item" href="{% url 'view_animals' %}">Animals</a>
+                <a class="dropdown-item" href="{% url 'department_list' %}">Departments</a>
+                <a class="dropdown-item" href="{% url 'exhibit_list' %}">Exhibits</a>
+                <a class="dropdown-item" href="{% url 'staff_list' %}">Staff</a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="#">Something else here</a>
             </div>
           </li>
+            <li class="nav-item active">
+                <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+            </li>
+
         {% else %}
-            <li class="nav-item">
+            <li class="nav-item active">
                 <a class="nav-link" href="{% url 'login' %}">Login</a>
             </li>
         {% endif %}
     </ul>
-    <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-    </form>
   </div>
 </nav>
      <br>

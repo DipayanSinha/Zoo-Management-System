@@ -1,13 +1,16 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
-from .forms import DepartmentForm,ExhibitForm,AnimalForm,StaffForm
+from django.contrib.auth.forms import PasswordChangeForm
+from .forms import DepartmentForm,ExhibitForm,AnimalForm,StaffForm,ChangePassword
 from .models import Animal,Department,Staff,Exhibit
-
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_list_or_404, get_object_or_404
+from django.contrib.auth.mixins import LoginRequiredMixin
 # Create your views here.
+
 def home(request):
-    return render(request,'Zoo/home.html',{})
+    return render(request, 'Zoo/home.html', {})
 
 def login_user(request):
     if(request.method=='POST'):
@@ -22,12 +25,27 @@ def login_user(request):
             messages.success(request,'Failed to Log in! Try again...')
             return redirect('login')
     else:
-        return render(request, 'Zoo/login.html', {})
+        return render(request, 'Zoo/Authenticate/login.html', {})
+
+@login_required(login_url='/login/')
+def change_password(request):
+    if (request.method == 'POST'):
+        form = ChangePassword(data=request.POST,user=request.user)
+        if (form.is_valid()):
+            form.save()
+            messages.success(request, 'You have successfully changed your password')
+            return redirect('home')
+    else:
+        form = ChangePassword(user=request.user)
+    context = {'form': form}
+    return render(request, 'zoo/Authenticate/change_password.html', context)
+
 def logout_user(request):
     logout(request)
     messages.success(request,'Logged out successfully')
     return redirect('home')
 
+@login_required()
 def add_department(request):
     if (request.method == 'POST'):
         form = DepartmentForm(request.POST)# instance=request.user)
@@ -39,7 +57,7 @@ def add_department(request):
     else:
         form = DepartmentForm()
     context = {'form':form}
-    return render(request,'Zoo/add_department.html',context)
+    return render(request, 'Zoo/departments/add_department.html', context)
 
 def add_exhibit(request):
     if (request.method == 'POST'):
@@ -52,7 +70,7 @@ def add_exhibit(request):
     else:
         form = ExhibitForm()
     context = {'form':form}
-    return render(request,'Zoo/add_exhibit.html',context)
+    return render(request, 'Zoo/exhibits/add_exhibit.html', context)
 
 def add_animal(request):
     if (request.method == 'POST'):
@@ -65,7 +83,7 @@ def add_animal(request):
     else:
         form = AnimalForm()
     context = {'form':form}
-    return render(request,'Zoo/add_animal.html',context)
+    return render(request, 'Zoo/animals/add_animal.html', context)
 def add_staff(request):
     if (request.method == 'POST'):
         form = StaffForm(request.POST)# instance=request.user)
@@ -77,7 +95,7 @@ def add_staff(request):
     else:
         form = StaffForm()
     context = {'form':form}
-    return render(request,'Zoo/add_Staff.html',context)
+    return render(request, 'Zoo/staff/add_Staff.html', context)
 
 def view_animals(request):
     animals = ""
@@ -86,12 +104,12 @@ def view_animals(request):
     else:
         search_text = ''
     animals = Animal.objects.filter(commonname__contains=search_text) or Animal.objects.filter(id__contains=search_text)
-    return render(request, 'Zoo/list_animals.html', {'animals': animals})
+    return render(request, 'Zoo/animals/list_animals.html', {'animals': animals})
 
 def animal_profile(request,id):
     key = Animal.objects.get(pk=id)
     context = {'key':key}
-    return render(request, 'Zoo/animal_profile.html', context)
+    return render(request, 'Zoo/animals/animal_profile.html', context)
 
 def animal_delete(request, id):
     animal = Animal.objects.get(pk = id)
@@ -109,7 +127,7 @@ def edit_animal(request, id):
           return redirect('view_animals')
    else:
        form = AnimalForm(instance=animal)
-   return render(request, 'Zoo/edit_animal.html', {'form': form,'animal':animal})
+   return render(request, 'Zoo/animals/edit_animal.html', {'form': form, 'animal':animal})
 
 def deptList(request):
     depts = ""
@@ -118,7 +136,7 @@ def deptList(request):
     else:
         search_text = ''
     depts = Department.objects.filter(name__contains=search_text) or Department.objects.filter(id__contains=search_text)
-    return render(request, 'Zoo/department_list.html', {'depts': depts})
+    return render(request, 'Zoo/departments/department_list.html', {'depts': depts})
     #depts = Department.objects.all().order_by('id')
     #return render(request,'Zoo/department_list.html',{'depts':depts})
 
@@ -139,7 +157,7 @@ def edit_department(request, id):
           return redirect('department_list')
    else:
        form = DepartmentForm(instance=department)
-   return render(request, 'Zoo/edit_department.html', {'form': form,'dept':department})
+   return render(request, 'Zoo/departments/edit_department.html', {'form': form, 'dept':department})
 
 '''def search_department(request):
     depts=""
@@ -153,7 +171,7 @@ def edit_department(request, id):
 def department_profile(request,id):
     key = Department.objects.get(pk=id)
     context = {'key':key}
-    return render(request, 'Zoo/department_profile.html', context)
+    return render(request, 'Zoo/departments/department_profile.html', context)
 
 def view_staff(request):
     if (request.method == 'POST'):
@@ -161,12 +179,12 @@ def view_staff(request):
     else:
         search_text = ''
     staff = Staff.objects.filter(firstname__contains=search_text) or Staff.objects.filter(id__contains=search_text)
-    return render(request, 'Zoo/staff_list.html', {'staff': staff})
+    return render(request, 'Zoo/staff/staff_list.html', {'staff': staff})
 
 def staff_profile(request,id):
     key = Staff.objects.get(pk=id)
     context = {'key':key}
-    return render(request, 'Zoo/staff_profile.html', context)
+    return render(request, 'Zoo/staff/staff_profile.html', context)
 
 def staff_delete(request, id):
     staff = Staff.objects.get(pk = id)
@@ -184,7 +202,7 @@ def edit_staff(request, id):
           return redirect('staff_list')
    else:
        form = StaffForm(instance=staff)
-   return render(request, 'Zoo/edit_staff.html', {'form': form,'staff':staff})
+   return render(request, 'Zoo/staff/edit_staff.html', {'form': form, 'staff':staff})
 
 def view_exhibit(request):
     if (request.method == 'POST'):
@@ -192,12 +210,12 @@ def view_exhibit(request):
     else:
         search_text = ''
     exhibit = Exhibit.objects.filter(name__contains=search_text) or Exhibit.objects.filter(id__contains=search_text)
-    return render(request, 'Zoo/exhibit_list.html', {'exhibits': exhibit})
+    return render(request, 'Zoo/exhibits/exhibit_list.html', {'exhibits': exhibit})
 
 def exhibit_profile(request,id):
     key = Exhibit.objects.get(pk=id)
     context = {'key':key}
-    return render(request, 'Zoo/exhibit_profile.html', context)
+    return render(request, 'Zoo/exhibits/exhibit_profile.html', context)
 
 def exhibit_delete(request, id):
     exhibit = Exhibit.objects.get(pk = id)
@@ -215,9 +233,15 @@ def edit_exhibit(request, id):
           return redirect('exhibit_list')
    else:
        form = ExhibitForm(instance=exhibit)
-   return render(request, 'Zoo/edit_exhibit.html', {'form': form,'exhibits':exhibit})
+   return render(request, 'Zoo/exhibits/edit_exhibit.html', {'form': form, 'exhibits':exhibit})
 
+def animal_gallery(request):
+    return render(request, 'Zoo/gallery/animal_gallery.html', {})
+def bird_gallery(request):
+    return render(request, 'Zoo/gallery/bird_gallery.html', {})
+def aquatic_gallery(request):
+    return render(request, 'Zoo/gallery/aquatic_gallery.html', {})
 def sidebar(request):
     return render(request,'Zoo/Sidebar.html',{})
 def test(request):
-    return render(request, 'Zoo/test.html', {})
+    return render(request, 'Zoo/home-2.html', {})

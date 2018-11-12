@@ -1,5 +1,43 @@
 from django import forms
 from .models import Department,Exhibit,Animal,Staff
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.forms import User
+
+class ChangePassword(PasswordChangeForm):
+    '''error_css_class = 'has-error'''''
+    '''error_messages = {'password_incorrect':
+                          "Το παλιό συνθηματικό δεν είναι σωστό. Προσπαθείστε   ξανά."}'''
+    old_password = forms.CharField(required=True, label='Old password',
+                             widget=forms.PasswordInput(attrs={
+                                 'class': 'form-control','placeholder':'Old password'}),
+                             )
+
+    new_password1 = forms.CharField(required=True, label='New Password',
+                              widget=forms.PasswordInput(attrs={'class': 'form-control','placeholder':'Enter Password'}))
+    new_password2 = forms.CharField(required=True, label='Re-enter New Password',
+                              widget=forms.PasswordInput(attrs={
+                                  'class': 'form-control','placeholder':'Enter Password'}),
+                              )
+    class Meta:
+        model=User
+        fields = ('old_password','new_password1','new_password2')
+
+    def __init__(self,*args,**kwargs):
+        super(ChangePassword,self).__init__(*args,**kwargs)
+
+        self.fields['old_password'].widget.attrs['class'] = 'form-control'
+        self.fields['old_password'].label = ""
+        self.fields['old_password'].widget.attrs['placeholder'] = 'Enter your Username'
+        self.fields['new_password1'].widget.attrs['class'] = 'form-control'
+        self.fields['new_password1'].label = ""
+        self.fields['new_password1'].help_text = '<ul class="form-text text-muted small"><li>Your password can\'t be too similar to your other personal information.</li><li>Your password must contain at least 8 characters.</li> ' \
+                                    '<li>Your password can\'t be a commonly used password.</li> <li>Your password can\'t be entirely numeric.</li> ' \
+                                    ' </ul>'
+        self.fields['new_password1'].widget.attrs['placeholder'] = 'Enter your Password'
+        self.fields['new_password2'].widget.attrs['class'] = 'form-control'
+        self.fields['new_password2'].label = ""
+        self.fields['new_password2'].widget.attrs['placeholder'] = 'Re-enter your Password'
+        self.fields['new_password2'].help_text = '<span class="form-text text-muted"><small>Enter the same password as before, for verification.</small></span>'
 
 class DepartmentForm(forms.ModelForm):
     id = forms.CharField(max_length=4, label="Department ID",
